@@ -1,6 +1,6 @@
-# child-directed-listening
+# child-grammar
 
-Analyses for "Child Directed Listening" project. 
+Entire codebase was initialized from https://github.com/smeylan/child-directed-listening (approx. 11/19/22).
 
 
 # Setup
