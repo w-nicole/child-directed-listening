@@ -1,7 +1,7 @@
 {
     "SEED" : 0, 
     "n_beta" : 500,
-    "n_lambda" : 5000,
+    "n_lambda" : 500,
     "n_across_time" : 500,
     "subsamples" : [2, 100, 500, 1000],
     "val_ratio" : ".2",
