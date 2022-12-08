@@ -9,9 +9,8 @@ def split_parser():
     # For syntax references
     
     parser = argparse.ArgumentParser()
-
+    
     parser.add_argument('task_name', type = str, help = 'The name of the task name for groups of scripts to be run together on the cluster')
-
 
     parser.add_argument('task_phase', type = str, help = 'Which phase this corresponds to sample, extract_data, train, fit, or eval')
         

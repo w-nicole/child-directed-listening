@@ -18,8 +18,6 @@ class Config:
         local_root_dir : ???? can't find with grep
 
         n_beta : number of success samples used to evaluate scores of Levenshtein distance scaling parameter
-        
-        n_lambda :  number of success samples used to evaluate scores of the WFST path length parameter       
 
         n_across_time: Note this is the base pool sample, not necessarily the sample size used.
 
@@ -65,21 +63,6 @@ class Config:
         beta_num_values : number of values to test between the low and the high value of beta(20)
 
         fail_on_beta_edge : should the code fail if the best value is on the edge of the range of betas tested? (1)
-
-        lambda_low : lowest value of lambda to test (0)
-
-        lambda_high : highest value of lambda to test (2)
-
-        lambda_num_values : number of values to test between the low and the high value of lambda(20)   
-
-        fail_on_lambda_edge : should the code fail if the best value is on the edge of the range of lambdas tested? (1)
-
-        fst_path:  path to the fst txt file used for the WFST ("fst/chi-1.txt")
-
-        fst_sym_path: path to the phones file used for the WFST ("fst/chi_phones.sym")
-
-        fst_cache_path: path to where pairwise WFST path lengths between data and all vocab will be stored ("unigram_fst_cache")
-
         
         '''
 
@@ -110,7 +93,7 @@ class Config:
         # these all need to be defined with respect to the root
         self.make_folders([self.finetune_dir, self.prov_dir, self.prov_csv_dir])
         self.make_folders([self.model_dir, self.sample_dir, self.model_analyses_dir, self.data_dir, self.eval_dir, self.fitting_dir])
-        self.make_folders(['output/csv', 'output/pkl', 'output/fst','output/figures', 'output/SLURM', 'output/unigram_fst_cache', 'output/logs'])
+        self.make_folders(['output/csv', 'output/pkl','output/figures', 'output/SLURM', 'output/logs'])
 
 
     def set_defaults(self):

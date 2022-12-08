@@ -29,7 +29,7 @@ install.packages("ggplot2")
 
 Now, back in Terminal, run
 
-```pip3 install levenshtein scipy scikit-learn```
+```pip3 install matplotlib levenshtein scipy scikit-learn transformers```
 
 Finally, following an adaptation of the original installation directions here [2]:
 
