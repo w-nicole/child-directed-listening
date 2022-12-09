@@ -134,6 +134,13 @@ def get_slurm_script_name(spec_dict):
 
 		path = get_file_identifier(spec_dict)+'.sh'	
 		return(path)
+    
+    
+def get_chi_vocab_path():
+    folder = f'{config.finetune_dir}/all/all'
+    if not os.path.exists(folder): os.makedirs(folder)
+    path = os.path.join(folder, 'chi_vocab_train.csv')
+    return path
 
 
 def get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age = None, n=None):    

@@ -145,14 +145,13 @@ def get_shelf_dict(fitted_dict):
     return(fitted_dict)
 
 
-
 def get_data_unigram_dict(fitted_dict):
     
     adult_tokenizer, adult_softmax_mask, _, initial_vocab = get_vocab_tok_modules()
     
 
     fitted_dict['title'] = paths.get_file_identifier(fitted_dict)
-    fitted_dict['kwargs'] = {'child_counts_path': f'{config.finetune_dir}/all/all/chi_vocab_train.csv',
+    fitted_dict['kwargs'] = {'child_counts_path': paths.get_chi_vocab_path(),
                     'tokenizer': adult_tokenizer,
                     'softmax_mask': adult_softmax_mask,
                     'vocab': initial_vocab,
