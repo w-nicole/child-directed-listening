@@ -14,7 +14,8 @@ def get_ages_sample_paths(which_type, phase):
     """
     Gets all of the sample paths for a given split.
     """
-
+    import pdb; pdb.set_trace()
+    
     data_folder = join(config.prov_dir, 'across_time_samples')
     template = join(data_folder, f'{which_type}_utts_models_across_time_{config.n_across_time}_*_{phase}.csv')
     

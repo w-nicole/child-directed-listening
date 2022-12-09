@@ -29,6 +29,7 @@ def call_single_across_time_model(sample_dict, all_tokens_phono, this_model_dict
 
     ages = sorted(list(sample_dict.keys()))
    
+    import pdb; pdb.set_trace()
     for idx, age_str in enumerate(ages):
         
         print('Processing age '+ age_str)
@@ -49,8 +50,6 @@ def call_single_across_time_model(sample_dict, all_tokens_phono, this_model_dict
          
         best_beta_scores = sample_models_across_time.successes_and_failures_across_time_per_model(age, this_success_pool.utterance_id, this_yyy_pool.utterance_id, this_model_dict, all_tokens_phono, optimal_beta_value[0], 'levdist')        
         best_beta_scores.to_pickle(join(scores_output_path, f'levdist_run_models_across_time_{age_str}.pkl'))
-
-        
         
     return best_beta_scores
     

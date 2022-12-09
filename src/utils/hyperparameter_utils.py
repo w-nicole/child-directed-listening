@@ -42,7 +42,7 @@ def get_optimal_hyperparameter_value(this_model_dict, hyperparameter):
 
     fitted_model_path = paths.get_directory(fitted_model_dict)
     
-    assert hyperpararameter == 'beta', hyperparameter 
+    assert hyperparameter == 'beta', hyperparameter 
     n_hyperparameter = config.n_beta    
     
     this_hyperparameter_results  =  pd.read_csv(join(fitted_model_path, hyperparameter+f'_search_results_{n_hyperparameter}.csv'))
