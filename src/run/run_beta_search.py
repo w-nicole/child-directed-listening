@@ -33,7 +33,7 @@ def optimize_beta(fitting_dict):
     if not exists(fitting_path):
         os.makedirs(fitting_path)
     
-    success_utts_sample_path = paths.get_sample_csv_path(task_phase_to_sample_for='fit', split=fitting_dict['test_split'], dataset=fitting_dict['test_dataset'], data_type='success', age = None, n=config.n_beta)
+    success_utts_sample_path = paths.get_sample_csv_path(task_phase_to_sample_for='fit', val_eval_phase='val', split=fitting_dict['test_split'], dataset=fitting_dict['test_dataset'], data_type='success', age = None, n=config.n_beta)
     success_utts_sample  = pd.read_csv(success_utts_sample_path).utterance_id
         
     # Don't use failures for beta search

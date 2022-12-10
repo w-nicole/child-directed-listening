@@ -78,7 +78,7 @@ if __name__ == '__main__':
     
     
     if (this_model_args['test_split'] == 'Providence') and (this_model_args['test_dataset'] == 'all'): 
-        this_sample_dict = load_splits.load_sample_model_across_time_args()    
+        this_sample_dict = load_splits.load_sample_model_across_time_args(this_model_args['test_split'], this_model_args['test_dataset'])    
         
     elif (this_model_args['test_split'] == 'Providence-Child'):
         #think about where this was in the notebooks        

@@ -6,18 +6,18 @@ import pandas as pd
 import pickle
 from collections import defaultdict
 import numpy as np
-from src.utils import split_gen, sampling, configuration
+from src.utils import split_gen, sampling, configuration, paths
 config = configuration.Config()
 
-def get_ages_sample_paths(which_type, phase):
-    
+def get_ages_sample_paths(partition_type, phase, split, dataset):
     """
     Gets all of the sample paths for a given split.
     """
     
     data_folder = join(config.prov_dir, 'across_time_samples')
-    template = join(data_folder, f'{which_type}_utts_models_across_time_{config.n_across_time}_*_{phase}.csv')
-    
+    # the asterisk works because this is just a template
+    template = paths.get_sample_csv_path('eval', phase, split, dataset, partition_type, '*', config.n_across_time)
+        
     all_age_sample_paths = glob.glob(template)
     
     age2path = {}
@@ -49,15 +49,13 @@ def apply_if_subsample(data, path = None):
     return trunc_data    
 
 
-def load_sample_model_across_time_args():
+def load_sample_model_across_time_args(split, dataset):
     
     sample_dict = defaultdict(dict)
-    import pdb; pdb.set_trace()
-    success_paths = get_ages_sample_paths('success', config.eval_phase)
-    yyy_paths = get_ages_sample_paths('yyy', config.eval_phase)
+    success_paths = get_ages_sample_paths('success', config.eval_phase, split, dataset)
+    yyy_paths = get_ages_sample_paths('yyy', config.eval_phase, split, dataset)
     
     for name, path_set in zip(['success', 'yyy'], [success_paths, yyy_paths]):
-        import pdb; pdb.set_trace()
         for age, path in path_set.items():
             this_data = pd.read_csv(path)
             this_data = apply_if_subsample(this_data)

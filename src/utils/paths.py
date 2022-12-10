@@ -146,7 +146,7 @@ def get_chi_vocab_path():
 def get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age = None, n=None):    
 
     assert ( (age is None) and (task_phase_to_sample_for == 'fit' or split == 'Providence') and val_eval_phase == 'val' ) or ( (age is not None) and (task_phase_to_sample_for == 'eval') and val_eval_phase in {'val', 'eval'} )
-    age_str = f'_{float(age)}' if age is not None else ''
+    age_str = f'_{float(age) if not age == "*" else age}' if age is not None else ''
     
     assert data_type in ['success', 'yyy'], "Invalid data type requested of sample path: choose one of {success, yyy}."
     
