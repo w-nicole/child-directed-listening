@@ -143,15 +143,13 @@ def get_chi_vocab_path():
     return path
 
 
-def get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age = None, n=None):    
+def get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age = None, n=None):    
 
-    assert ( (age is None) and (task_phase_to_sample_for == 'fit' or split == 'Providence') ) or ( (age is not None) and (task_phase_to_sample_for == 'eval') )
+    assert ( (age is None) and (task_phase_to_sample_for == 'fit' or split == 'Providence') and val_eval_phase == 'val' ) or ( (age is not None) and (task_phase_to_sample_for == 'eval') and val_eval_phase in {'val', 'eval'} )
     age_str = f'_{float(age)}' if age is not None else ''
     
     assert data_type in ['success', 'yyy'], "Invalid data type requested of sample path: choose one of {success, yyy}."
     
-    # where should the sampling csvs get stored? at samples for a run,
-    # dvided by split and then by datase
     sample_folder =  get_directory({
 		"test_split" : None, 
 		"training_split" : split,
@@ -167,6 +165,6 @@ def get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age
     if not exists(sample_folder):
     	os.makedirs(sample_folder)
     
-    this_data_path = join(sample_folder, f'{task_phase_to_sample_for}_{data_type}_utts_{str(n)}{age_str}.csv')
+    this_data_path = join(sample_folder, f'{task_phase_to_sample_for}_{val_eval_phase}_{data_type}_utts_{str(n)}{age_str}.csv')
     
     return this_data_path

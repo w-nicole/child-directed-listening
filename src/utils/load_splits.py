@@ -14,7 +14,6 @@ def get_ages_sample_paths(which_type, phase):
     """
     Gets all of the sample paths for a given split.
     """
-    import pdb; pdb.set_trace()
     
     data_folder = join(config.prov_dir, 'across_time_samples')
     template = join(data_folder, f'{which_type}_utts_models_across_time_{config.n_across_time}_*_{phase}.csv')
@@ -53,11 +52,12 @@ def apply_if_subsample(data, path = None):
 def load_sample_model_across_time_args():
     
     sample_dict = defaultdict(dict)
-    
+    import pdb; pdb.set_trace()
     success_paths = get_ages_sample_paths('success', config.eval_phase)
     yyy_paths = get_ages_sample_paths('yyy', config.eval_phase)
     
     for name, path_set in zip(['success', 'yyy'], [success_paths, yyy_paths]):
+        import pdb; pdb.set_trace()
         for age, path in path_set.items():
             this_data = pd.read_csv(path)
             this_data = apply_if_subsample(this_data)
