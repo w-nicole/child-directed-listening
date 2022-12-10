@@ -25,7 +25,7 @@ def get_ages_sample_paths(partition_type, phase, split, dataset):
         # The age is located at the end.
         # 7/15/21: https://www.geeksforgeeks.org/python-os-path-splitext-method/
         filename = os.path.splitext(path)
-        age = filename[0].split('_')[-2]
+        age = filename[0].split('_')[-1]
         # end cite
         age2path[age] = path
     
