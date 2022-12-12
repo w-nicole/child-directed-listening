@@ -204,7 +204,7 @@ def get_finetune_dict(fitted_dict):
 
 def get_fitted_model_dict(fitted_dict):
     """
-    Only for age/all splits. Child loading is in utils_child/child_models.py
+    Only for age/all splits.
     """
     
     # The format for the name is:
