@@ -14,7 +14,6 @@ def get_ages_sample_paths(partition_type, phase, split, dataset):
     Gets all of the sample paths for a given split.
     """
     
-    data_folder = join(config.prov_dir, 'across_time_samples')
     # the asterisk works because this is just a template
     template = paths.get_sample_csv_path('eval', phase, split, dataset, partition_type, '*', config.n_across_time)
         
@@ -22,11 +21,7 @@ def get_ages_sample_paths(partition_type, phase, split, dataset):
     
     age2path = {}
     for path in all_age_sample_paths:
-        # The age is located at the end.
-        # 7/15/21: https://www.geeksforgeeks.org/python-os-path-splitext-method/
-        filename = os.path.splitext(path)
-        age = filename[0].split('_')[-1]
-        # end cite
+        age = paths.extract_age_str(path)
         age2path[age] = path
     
     return age2path

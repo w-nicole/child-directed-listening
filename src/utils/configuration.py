@@ -40,8 +40,6 @@ class Config:
 
         n_dev_sample : number of samples in a dev run 
 
-        dist_type : ??? type of the distance function to use for the likeklioof function, now we compute both sp we can drop it
-
         eval_phase: {'val', 'eval'} -- ??? what to compute the scores on. Switch to eval at the end?
 
         exp_determiner: Name of the model run in which to place all results in experiments/

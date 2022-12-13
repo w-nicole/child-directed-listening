@@ -1,8 +1,21 @@
+
 from os.path import join, exists
 import os
 from src.utils import configuration
 config = configuration.Config()
 
+
+def extract_age_str(path):
+    # The age is located at the end.
+    # 7/15/21: https://www.geeksforgeeks.org/python-os-path-splitext-method/
+    filename = os.path.splitext(path)
+    age = filename[0].split('_')[-1]
+    try:
+        float(age) # Make sure you're actually extracting an age
+    except: import pdb; pdb.set_trace()
+    # end cite
+    return age
+    
 
 def validate_spec_dict(spec_dict, spec_dict_params):
 	''' make sure all necessary keys are specified for the spec_dict'''

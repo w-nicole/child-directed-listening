@@ -82,19 +82,6 @@ def gen_unigram_args():
     return load_args
 
 
-def gen_child_model_args():
-
-    child_model_args =  []
-
-    for model_arg_set in config.child_model_args:        
-
-        model_arg_set['use_tags'] = True
-        model_arg_set['context_width'] = 20
-        child_model_args.append(copy.copy(model_arg_set))
-
-    return child_model_args
-
-
 def gen_all_model_args():
     
     """
