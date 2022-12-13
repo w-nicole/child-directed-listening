@@ -11,7 +11,7 @@ import sys
 sys.path.append('.')
 sys.path.append('src/.')
 # end cite
-from src.utils import configuration, generation_processing, load_splits
+from src.utils import configuration, generation_processing, load_splits, paths
 config = configuration.Config()
 
 def sample_bert_token_ids():
@@ -39,7 +39,7 @@ def sample_bert_token_ids():
         subsamples[age_str] = list(np.random.choice(pool, size = current_n))
         print(f'For age: {age_str}, subsample size: {current_n} / {len(pool)}') 
         
-    subsample_path = os.path.join(config.eval_dir, 'subsampled_bert_token_ids.pt')
+    subsample_path = paths.get_subsample_path()
     
     all_ids = set()
     for current_set in list(map(lambda samples : set(samples), subsamples.values())):

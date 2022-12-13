@@ -155,6 +155,9 @@ def get_chi_vocab_path():
     path = os.path.join(folder, 'chi_vocab_train.csv')
     return path
 
+def get_subsample_path():
+    return os.path.join(config.eval_dir, 'subsampled_bert_token_ids.pt')
+
 
 def get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age = None, n=None):    
 
