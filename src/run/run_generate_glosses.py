@@ -5,7 +5,7 @@ import torch
 import pandas as pd
 
 import sys
-# 12/13/22: https://github.com/smeylan/child-directed-listening/blob/d782ef5b24998b215a1724b48fcf57e8b7b73898/src/run/run_models_across_time.py
+# Adapted 12/13/22: https://github.com/smeylan/child-directed-listening/blob/d782ef5b24998b215a1724b48fcf57e8b7b73898/src/run/run_models_across_time.py
 sys.path.append('.')
 sys.path.append('src/.')
 # end cite

@@ -7,7 +7,7 @@ import json
 import torch
 
 import sys
-# 12/12/22: https://github.com/smeylan/child-directed-listening/blob/master/src/run/run_beta_search.py
+# Adapted 12/12/22: https://github.com/smeylan/child-directed-listening/blob/master/src/run/run_beta_search.py
 sys.path.append('.')
 sys.path.append('src/.')
 # end cite
@@ -55,7 +55,7 @@ def sample_bert_token_ids():
         import pdb; pdb.set_trace()
         
     
-    full_prior_folder = os.path.join(config.eval_dir, f'n={config.n_across_time}', 'human')
+    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
     if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
     all_shuffled_phono_in_subset_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
     all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss']])

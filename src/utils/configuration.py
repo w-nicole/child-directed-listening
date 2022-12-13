@@ -124,6 +124,7 @@ class Config:
         self.model_dir = join(self.exp_dir, 'train')
         self.fitting_dir = join(self.exp_dir, 'fit')
         self.eval_dir = join(self.exp_dir, 'eval')
+        self.eval_priors_dir = join(self.eval_dir, f'n={self.n_across_time}')
         self.model_analyses_dir = join(self.exp_dir, 'analyze')        
 
 
