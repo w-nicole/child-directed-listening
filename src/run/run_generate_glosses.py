@@ -28,18 +28,29 @@ if __name__ == "__main__":
     stopwords_set = generation_processing.get_stopword_set()
     
     all_updated_dfs = []
+    all_viewable_dfs = []
     for age_str in sorted(dfs.keys()):
         age_based_id_set = subsamples[age_str]
         print(f'Updating glosses: {age_str}')
         raw_df_uncut = dfs[age_str]
         raw_df_cut = raw_df_uncut[raw_df_uncut.bert_token_id.isin(age_based_id_set)].copy()
         updated_df = generation.replace_gloss_single_entry(raw_df_cut, all_tokens_phono)
+        viewable_df = updated_df[['bert_token_id', 'new_gloss']]
         if not all(updated_df.token.isin(stopwords_set)):
             import pdb; pdb.set_trace()
         all_updated_dfs.append(updated_df)
+        all_viewable_dfs.append(viewable_df)
         
     all_updated_scores_path = os.path.join(full_prior_folder, 'subsampled_levdist_generated_glosses.pkl')
     all_updated_scores = pd.concat(all_updated_dfs)
     all_updated_scores.to_pickle(all_updated_scores_path)
-    print(f'Written to: {all_updated_scores_path}')
+    
+    all_viewable_scores_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
+    all_viewable_scores = generation_processing.shuffle_dataframe(pd.concat(all_viewable_dfs))
+    all_viewable_scores.to_csv(all_viewable_scores_path)
+        
+    print(f'Written all scores to: {all_updated_scores_path}')
+    print(f'Written viewable glosses to: {all_viewable_scores_path}')
+    
+    
     

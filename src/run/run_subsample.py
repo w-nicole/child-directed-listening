@@ -25,8 +25,11 @@ def sample_bert_token_ids():
     reference_dict = dfs_by_folder[first_key]
 
     for key in dfs_by_folder:
+        if 'human' in key:
+            print('Skipping human folder as expected'); continue
         compare_df_dict = dfs_by_folder[key]
-        assert list(compare_df_dict.keys()) == list(reference_dict.keys())
+        if not list(compare_df_dict.keys()) == list(reference_dict.keys()):
+            import pdb; pdb.set_trace()
         for age_str in reference_dict:
             if not np.all(list(reference_dict[age_str].bert_token_id) == list(compare_df_dict[age_str].bert_token_id)):
                 import pdb; pdb.set_trace()
@@ -46,9 +49,18 @@ def sample_bert_token_ids():
         all_ids |= current_set
     all_tokens_phono = load_splits.load_phono()
     stopword_set = generation_processing.get_stopword_set()
-    stopword_in_samples_set = set(all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)].token)
+    all_phono_in_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)]
+    stopword_in_samples_set = set(all_phono_in_subset.token)
     if not stopword_in_samples_set.issubset(stopword_set):
         import pdb; pdb.set_trace()
+        
+    
+    full_prior_folder = os.path.join(config.eval_dir, f'n={config.n_across_time}', 'human')
+    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
+    all_shuffled_phono_in_subset_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
+    all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss']])
+    all_shuffled_phono.to_csv(all_shuffled_phono_in_subset_path)
+    print(f'Wrote viewable human data to {all_shuffled_phono_in_subset_path}')
     
     torch.save(subsamples, subsample_path)
     print(f'Wrote subsamples to {subsample_path}')

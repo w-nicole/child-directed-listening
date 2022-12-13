@@ -7,6 +7,13 @@ from src.utils import configuration, paths
 config = configuration.Config()
 
 
+def shuffle_dataframe(df):
+    # 12/13/22: shuffling dataframe
+    # https://www.geeksforgeeks.org/pandas-how-to-shuffle-a-dataframe-rows/
+    return df.sample(frac=1)
+    # end cite
+    
+    
 def get_dfs_by_age(prior_folder):
     raw_across_time_df_paths = glob.glob(os.path.join(prior_folder, 'levdist_run_models_across_time_*.pkl'))
     dfs = {}
