@@ -24,14 +24,15 @@ def sample_bert_token_ids():
     folders = generation_processing.get_prior_folders()
     dfs_by_folder = {}
     for folder in folders:
+        if config.prior_folders['Human'] == folder.split('/')[-1]:
+            print('Skipping human folder, as expected.')
+            continue
         dfs_by_folder[folder] = { age_str : df for age_str, df in generation_processing.get_dfs_by_age(folder).items() }
-    
+        
     first_key = sorted(list(dfs_by_folder.keys()))[0]
     reference_dict = dfs_by_folder[first_key]
 
     for key in dfs_by_folder:
-        if 'human' in key:
-            print('Skipping human folder as expected'); continue
         compare_df_dict = dfs_by_folder[key]
         if not list(compare_df_dict.keys()) == list(reference_dict.keys()):
             import pdb; pdb.set_trace()
@@ -39,13 +40,28 @@ def sample_bert_token_ids():
             if not np.all(list(reference_dict[age_str].bert_token_id) == list(compare_df_dict[age_str].bert_token_id)):
                 import pdb; pdb.set_trace()
                 
+    total_selected = 0
     subsamples = {}
     for age_str, raw_df in reference_dict.items():
         stopword_df = generation_processing.filter_for_stopwords(raw_df)
         pool = list(stopword_df.bert_token_id)
         current_n = min(len(pool), config.n_sentences_per_age)
-        subsamples[age_str] = list(np.random.choice(pool, size = current_n))
+        total_selected += current_n
+        subsamples[age_str] = list(np.random.choice(pool, size = current_n, replace = False))
         print(f'For age: {age_str}, subsample size: {current_n} / {len(pool)}') 
+        
+    # Check no duplicates
+    ages = sorted(subsamples.keys())
+    pool_total = set()
+    for age1 in ages:
+        for age2 in ages:
+            if age1 == age2 : continue
+            intersection = set(subsamples[age1]) & set(subsamples[age2])
+            if len(intersection) > 0:
+                import pdb; pdb.set_trace()
+            if len(set(subsamples[age1])) != len(subsamples[age1]):
+                import pdb; pdb.set_trace()
+            pool_total |= set(subsamples[age1])
         
     subsample_path = paths.get_subsample_path()
     
@@ -57,8 +73,12 @@ def sample_bert_token_ids():
     all_ids = set()
     for current_set in list(map(lambda samples : set(samples), subsamples.values())):
         all_ids |= current_set
+    if not total_selected == len(all_ids):
+        import pdb; pdb.set_trace()
     all_tokens_phono = load_splits.load_phono()
     stopword_set = generation_processing.get_stopword_set()
+    
+    
     all_phono_in_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)]
     stopword_in_samples_set = set(all_phono_in_subset.token)
     if not stopword_in_samples_set.issubset(stopword_set):
@@ -67,6 +87,7 @@ def sample_bert_token_ids():
     
     all_shuffled_phono_in_subset_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
     all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss']])
+    
     all_shuffled_phono.to_csv(all_shuffled_phono_in_subset_path)
     
     print(f'Wrote viewable human data to {all_shuffled_phono_in_subset_path}')
