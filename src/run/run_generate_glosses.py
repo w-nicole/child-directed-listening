@@ -12,6 +12,10 @@ sys.path.append('src/.')
 from src.utils import configuration, generation, generation_processing, load_splits, paths
 config = configuration.Config()
 
+# 12/13/22: https://github.com/smeylan/child-directed-listening/blob/master/src/utils/split_gen.py
+SEED = config.SEED
+np.random.seed(SEED)
+# end cite
 
 if __name__ == "__main__":
 

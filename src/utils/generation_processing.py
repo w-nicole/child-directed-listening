@@ -2,15 +2,20 @@
 import glob
 import os
 import pandas as pd
+import numpy as np
 
 from src.utils import configuration, paths
 config = configuration.Config()
 
+# 12/13/22: https://github.com/smeylan/child-directed-listening/blob/master/src/utils/split_gen.py
+SEED = config.SEED
+np.random.seed(SEED)
+# end cite
 
 def shuffle_dataframe(df):
     # 12/13/22: shuffling dataframe
-    # https://www.geeksforgeeks.org/pandas-how-to-shuffle-a-dataframe-rows/
-    return df.sample(frac=1)
+    # Adapted from https://www.geeksforgeeks.org/pandas-how-to-shuffle-a-dataframe-rows/
+    return df.sample(frac=1, random_state = config.SEED)
     # end cite
     
     
@@ -24,8 +29,8 @@ def get_dfs_by_age(prior_folder):
 
 
 def get_prior_folders():
-    folders = glob.glob(os.path.join(config.eval_dir, f"n={config.n_across_time}", "*"))
-    assert all(map(lambda path : os.path.isdir(path), folders))
+    possible_folders = glob.glob(os.path.join(config.eval_dir, f"n={config.n_across_time}", "*"))
+    folders = list(filter(lambda path : os.path.isdir(path), possible_folders))
     return folders
     
 def get_stopword_set():

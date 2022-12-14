@@ -8,6 +8,8 @@ class Config:
 
         '''
         Reads the following parameters from the JSON
+        
+        prior_folders: The names of the folders (circumvents needing to go through `src/utils/paths`) to use for visualizing the time plot
 
         slurm_user : user on the SLURM cluster, e.g. OpenMind, formerly OpenMind
 

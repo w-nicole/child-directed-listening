@@ -14,6 +14,11 @@ sys.path.append('src/.')
 from src.utils import configuration, generation_processing, load_splits, paths
 config = configuration.Config()
 
+# 12/13/22: https://github.com/smeylan/child-directed-listening/blob/master/src/utils/split_gen.py
+SEED = config.SEED
+np.random.seed(SEED)
+# end cite
+
 def sample_bert_token_ids():
     
     folders = generation_processing.get_prior_folders()
@@ -44,6 +49,11 @@ def sample_bert_token_ids():
         
     subsample_path = paths.get_subsample_path()
     
+    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
+    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
+    
+    # Write human in prep for plotting
+    
     all_ids = set()
     for current_set in list(map(lambda samples : set(samples), subsamples.values())):
         all_ids |= current_set
@@ -53,13 +63,12 @@ def sample_bert_token_ids():
     stopword_in_samples_set = set(all_phono_in_subset.token)
     if not stopword_in_samples_set.issubset(stopword_set):
         import pdb; pdb.set_trace()
-        
+    assert set(all_phono_in_subset.speaker_code) == {'CHI'}
     
-    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
-    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
     all_shuffled_phono_in_subset_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
     all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss']])
     all_shuffled_phono.to_csv(all_shuffled_phono_in_subset_path)
+    
     print(f'Wrote viewable human data to {all_shuffled_phono_in_subset_path}')
     
     torch.save(subsamples, subsample_path)

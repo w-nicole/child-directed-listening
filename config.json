@@ -5,6 +5,11 @@
     "n_across_time" : 500,
     "subsamples" : [2, 100, 500, 1000],
     "val_ratio" : ".2",
+    "prior_folders" : {
+        "Human" : "human",
+        "Flat" : "no-split_no-dataset_no_tagsxflat_unigram_Providence_all_0",
+        "CHILDES unigram" : "Providence_all_no_tagsxdata_unigram_Providence_all_0"
+    },
     "unigram_model_args": [
         {
             "training_split": "Providence",
