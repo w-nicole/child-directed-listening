@@ -28,7 +28,7 @@ def optimize_beta(fitting_dict):
     # initial_vocab determines the softmax mask used by BERT, leave it as mask for all evaluations/training
     
     initial_vocab, cmu_in_initial_vocab, cmu_indices_for_initial_vocab  = load_models.get_initial_vocab_info()
-    fitting_path =  paths.get_directory(fitting_dict)    
+    fitting_path = paths.get_directory(fitting_dict)    
     
     if not exists(fitting_path):
         os.makedirs(fitting_path)

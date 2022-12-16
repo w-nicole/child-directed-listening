@@ -6,7 +6,9 @@ import copy
 import time
 from string import punctuation
 import Levenshtein
-from src.utils import data_cleaning, load_models
+from src.utils import data_cleaning, load_models, configuration
+
+config = configuration.Config()
 
 def softmax(x, axis=None):
     '''
@@ -715,7 +717,7 @@ def get_posteriors(prior_data, levdists, initial_vocab, bert_token_ids=None, sca
         
         if examples_mode:
             
-            num_highest_to_keep = 10 
+            num_highest_to_keep = config.number_of_posterior_words
             highest_prior_indices = np.argsort(prior_data['priors'][i, :])[::-1]
             highest_prior_words = np.array(initial_vocab)[highest_prior_indices][0:num_highest_to_keep]
 

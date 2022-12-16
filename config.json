@@ -3,6 +3,7 @@
     "n_sentences_per_age" : 125,
     "n_beta" : 500,
     "n_across_time" : 500,
+    "number_of_posterior_words" : 1000,
     "subsamples" : [2, 100, 500, 1000],
     "val_ratio" : ".2",
     "prior_folders" : {

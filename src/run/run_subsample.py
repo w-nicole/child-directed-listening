@@ -11,7 +11,7 @@ import sys
 sys.path.append('.')
 sys.path.append('src/.')
 # end cite
-from src.utils import configuration, generation_processing, load_splits, paths
+from src.utils import configuration, generation_processing, load_splits, paths, load_models, generation_processing
 config = configuration.Config()
 
 # 12/13/22: https://github.com/smeylan/child-directed-listening/blob/master/src/utils/split_gen.py
@@ -24,7 +24,7 @@ def sample_bert_token_ids():
     folders = generation_processing.get_prior_folders()
     dfs_by_folder = {}
     for folder in folders:
-        if config.prior_folders['Human'] == folder.split('/')[-1]:
+        if paths.is_prior_name_human(folder.split('/')[-1]):
             print('Skipping human folder, as expected.')
             continue
         dfs_by_folder[folder] = { age_str : df for age_str, df in generation_processing.get_dfs_by_age(folder).items() }
@@ -64,9 +64,7 @@ def sample_bert_token_ids():
             pool_total |= set(subsamples[age1])
         
     subsample_path = paths.get_subsample_path()
-    
-    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
-    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
+    human_folder = paths.get_human_folder()
     
     # Write human in prep for plotting
     
@@ -79,14 +77,18 @@ def sample_bert_token_ids():
     stopword_set = generation_processing.get_stopword_set()
     
     
-    all_phono_in_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)]
+    all_phono_in_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)].copy()
     stopword_in_samples_set = set(all_phono_in_subset.token)
     if not stopword_in_samples_set.issubset(stopword_set):
         import pdb; pdb.set_trace()
     assert set(all_phono_in_subset.speaker_code) == {'CHI'}
     
-    all_shuffled_phono_in_subset_path = os.path.join(full_prior_folder, 'viewable_levdist_generated_glosses.csv')
-    all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss']])
+    all_shuffled_phono_in_subset_path = os.path.join(human_folder, 'viewable_levdist_generated_glosses.csv')
+    tokenizer = load_models.get_primary_tokenizer()
+    
+    new_glosses = generation_processing.process_glosses_with_tokenizer(all_phono_in_subset, tokenizer)
+    all_phono_in_subset['new_gloss'] = new_glosses
+    all_shuffled_phono = generation_processing.shuffle_dataframe(all_phono_in_subset[['bert_token_id', 'gloss', 'new_gloss']])
     
     all_shuffled_phono.to_csv(all_shuffled_phono_in_subset_path)
     

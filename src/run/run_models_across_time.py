@@ -56,62 +56,29 @@ def call_single_across_time_model(sample_dict, all_tokens_phono, this_model_dict
 if __name__ == '__main__':
     
     start_time = str(datetime.today())
-    
     parser = parsers.split_parser()
-    parser.add_argument('--examples_mode', nargs = '?', default = False, type=lambda x: (str(x).lower() == 'true'), help = "Whether to include speaker tags. This should only be used as True with the CHILDES models")
     
     # 7/7/21: https://stackoverflow.com/questions/17118999/python-argparse-unrecognized-arguments    
     raw_args = parser.parse_known_args()[0]
     # Not sure why known args is necessary here.
     
-    # parsers.check_args(raw_args)
-    
     this_model_args = vars(raw_args)    
+    # Need this to generate the glosses
+    this_model_args['examples_mode'] = True
     this_model_args['task_phase'] = 'eval'
     this_model_args['n_samples'] = config.n_across_time   
     print(this_model_args)
-    
-                                                                    
+                                              
     all_phono = load_splits.load_phono()
     
     # this logic needs to be tested
     
-    
     if (this_model_args['test_split'] == 'Providence') and (this_model_args['test_dataset'] == 'all'): 
-        this_sample_dict = load_splits.load_sample_model_across_time_args(this_model_args['test_split'], this_model_args['test_dataset'])    
-        
-    elif (this_model_args['test_split'] == 'Providence-Child'):
-        #think about where this was in the notebooks        
-
-        this_sample_dict = {}
-        
-        eval_samples = all_phono.loc[(all_phono.phase_child_sample == 'eval') & (all_phono.target_child_name == this_model_args['test_dataset'])]
-
-        for age in [x for x in np.unique(eval_samples.year) if not np.isnan(x)]:
-
-            eval_samples_age =  eval_samples.loc[eval_samples.year == age]
-
-
-            success_utts = eval_samples_age[eval_samples_age.success_token][['utterance_id']].drop_duplicates()
-            failure_utts = eval_samples_age[eval_samples_age.yyy_token][['utterance_id']].drop_duplicates()
-
-            if success_utts.shape[0] > config.n_across_time:
-                success_utts = success_utts.iloc[0:config.n_across_time]
-
-            if failure_utts.shape[0] > config.n_across_time:
-                failure_utts = failure_utts.iloc[0:config.n_across_time]
-
-            rdict = {'success': success_utts, 'yyy': failure_utts}
-
-            this_sample_dict[str(age)] = copy.copy(rdict)
-
+        this_sample_dict = load_splits.load_sample_model_across_time_args(this_model_args['test_split'], this_model_args['test_dataset'])
     else:
         raise NotImplementedError
 
-
-    this_model_dict = load_models.get_fitted_model_dict(this_model_args)
-
-     
+    this_model_dict = load_models.get_fitted_model_dict(this_model_args)     
     best_beta_scores = call_single_across_time_model(this_sample_dict, all_phono, this_model_dict)
     
     print(f'Computations complete for model:')

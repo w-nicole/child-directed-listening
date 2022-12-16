@@ -5,6 +5,9 @@ from src.utils import configuration
 config = configuration.Config()
 
 
+def is_prior_name_human(folder_name):
+    return config.prior_folders['Human'] == folder_name
+
 def extract_age_str(path):
     # The age is located at the end.
     # 7/15/21: https://www.geeksforgeeks.org/python-os-path-splitext-method/
@@ -139,14 +142,6 @@ def get_file_identifier(spec_dict):
 	else:
 		raise NotImplementedError
 	return(path)
-
-
-def get_slurm_script_name(spec_dict):
-		# formerly get_slurm_script_path
-		#<training_split>_<training_dataset>(x<tags>)(x<model_type>)(x<test_split>_<test_dataset>_<context_width>)
-
-		path = get_file_identifier(spec_dict)+'.sh'	
-		return(path)
     
     
 def get_chi_vocab_path():
@@ -158,6 +153,10 @@ def get_chi_vocab_path():
 def get_subsample_path():
     return os.path.join(config.eval_dir, 'subsampled_bert_token_ids.pt')
 
+def get_human_folder():
+    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
+    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
+    return full_prior_folder
 
 def get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age = None, n=None):    
 

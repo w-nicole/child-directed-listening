@@ -9,5 +9,4 @@ python3 ./src/run/run_models_across_time.py \
     --use_tags "false" \
     --model_type "data_unigram" \
     --training_split "Providence" \
-    --training_dataset "all" \
-    --examples_mode "true"
+    --training_dataset "all"

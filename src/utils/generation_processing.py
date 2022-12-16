@@ -11,7 +11,33 @@ config = configuration.Config()
 SEED = config.SEED
 np.random.seed(SEED)
 # end cite
+    
+    
+def process_glosses_with_tokenizer(all_shuffled_phono, tokenizer):
+    
+    process_gloss = lambda gloss : '[chi] ' + ' '.join(tokenizer.tokenize(gloss))
+    old_glosses = list(all_shuffled_phono['gloss'])
+    new_glosses = list(map(process_gloss, old_glosses))
+    return new_glosses
 
+def get_tied_highest_posterior_words(token_entry):
+    
+    posterior_words = token_entry['highest_posterior_words'].split()
+    posterior_probabilities = list(map(lambda s : float(s), token_entry['highest_posterior_probabilities'].split()))
+    max_posterior_probability = np.max(posterior_probabilities)
+    if not np.isclose(max_posterior_probability, posterior_probabilities[0]):
+        import pdb; pdb.set_trace()
+    matches = np.where(np.isclose(posterior_probabilities, max_posterior_probability))[0]
+    if not np.all(matches == np.arange(matches.shape[0])):
+        import pdb; pdb.set_trace()
+        
+    highest_posterior_words = posterior_words[:matches.shape[0]]
+    if len(highest_posterior_words) >= config.number_of_posterior_words:
+        print(f"Increase the number of posterior words to save, {config.number_of_posterior_words}-way tie detected.")
+        import pdb; pdb.set_trace()
+    return highest_posterior_words
+    
+    
 def shuffle_dataframe(df):
     # 12/13/22: shuffling dataframe
     # Adapted from https://www.geeksforgeeks.org/pandas-how-to-shuffle-a-dataframe-rows/

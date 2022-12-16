@@ -9,6 +9,8 @@ class Config:
         '''
         Reads the following parameters from the JSON
         
+        number_of_posterior_words : The number of words to save from highest posterior words in the scoring process
+        
         prior_folders: The names of the folders (circumvents needing to go through `src/utils/paths`) to use for visualizing the time plot
 
         slurm_user : user on the SLURM cluster, e.g. OpenMind, formerly OpenMind
