@@ -15,7 +15,7 @@ np.random.seed(SEED)
     
 def process_glosses_with_tokenizer(all_shuffled_phono, tokenizer):
     
-    process_gloss = lambda gloss : '[chi] ' + ' '.join(tokenizer.tokenize(gloss))
+    process_gloss = lambda gloss : '[chi] ' + ' '.join(tokenizer.tokenize(gloss)) + ' .'
     old_glosses = list(all_shuffled_phono['gloss'])
     new_glosses = list(map(process_gloss, old_glosses))
     return new_glosses
