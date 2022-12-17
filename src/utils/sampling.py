@@ -34,7 +34,7 @@ def sample_successes_yyy(pool, task_phase_to_sample_for, val_eval_phase, split, 
         n = get_n(task_phase_to_sample_for)
     
     if age is not None: # Sample per age
-        pool = pool[pool.year == age]
+        pool = pool[np.isclose(pool.year, age)]
      
     # Need to sample the successes again and save them.
     # Use CSV for compatibility 

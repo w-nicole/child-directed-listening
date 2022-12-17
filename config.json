@@ -4,6 +4,7 @@
     "n_beta" : 500,
     "n_across_time" : 500,
     "number_of_posterior_words" : 1000,
+    "number_of_substitutions_to_plot" : 5,
     "val_ratio" : ".2",
     "prior_folders" : {
         "Human" : "human",
