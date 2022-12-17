@@ -11,7 +11,7 @@
         "CHILDES unigram" : "Providence_all_no_tagsxdata_unigram_Providence_all_0"
     },
     "regenerate" : 1,
-    "eval_phase" : "val",
+    "eval_phase" : "eval",
     "exp_determiner" : "full_scale",
     "training_version_name": "full_scale",
     "verbose" : 1,
