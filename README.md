@@ -41,7 +41,9 @@ Run each of the notebooks in `tier_1_data_generation` in order.
 
 Then, run `chmod u+x tier_2_scoring/data_unigram.sh; ./tier_2_scoring/data_unigram.sh` 
 
-Then run `chmod u+x tier_3_analyses/analyses.sh; ./tier_3_analyses/analyses.sh`.
+Upload the file `viewable_levdist_generated_glosses.csv` into Google Sheets and add a column `is_grammatical`. Delete the unlabeled index column, and give every row a score according to the description in the paper of grammaticality.
+
+Then upload that file as `scored_levdist_generated_glosses.csv` into the same folder as the `viewable` csv file and run `chmod u+x tier_3_analyses/analyses.sh; ./tier_3_analyses/analyses.sh`.
 
 The outputs will be in `outputs/experiments/full_scale/eval/n={number depending on your configuration}`.
 
