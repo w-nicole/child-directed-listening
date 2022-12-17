@@ -35,6 +35,16 @@ Finally, following an adaptation of the original installation directions here [2
 
 ```pip3 install --user ipykernel; python3 -m ipykernel install --user --name=child-grammar```
 
+# Running codebase
+
+Run each of the notebooks in `tier_1_data_generation` in order.
+
+Then, run `chmod u+x tier_2_scoring/data_unigram.sh; ./tier_2_scoring/data_unigram.sh` 
+
+Then run `chmod u+x tier_3_analyses/analyses.sh; ./tier_3_analyses/analyses.sh`.
+
+The outputs will be in `outputs/experiments/full_scale/eval/n={number depending on your configuration}`.
+
 [1] (11/19/22) https://community.rstudio.com/t/install-rlang-package-issue/84072/2
 
 [2] (11/19/22) https://github.com/smeylan/child-directed-listening

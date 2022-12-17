@@ -77,15 +77,14 @@ if __name__ == "__main__":
     
     # Write everything
     
-    full_folder = os.path.join(config.eval_dir, f'n={config.n_across_time}')
-    all_updated_scores_path = os.path.join(full_folder, 'subsampled_levdist_generated_glosses.pkl')
+    all_updated_scores_path = os.path.join(config.eval_priors_dir, 'subsampled_levdist_generated_glosses.pkl')
     all_updated_scores.to_pickle(all_updated_scores_path)
     print(f'Written all scores to: {all_updated_scores_path}')
     
-    viewable_to_prior_path = os.path.join(full_folder, 'full_levdist_generated_glosses.csv')
+    viewable_to_prior_path = os.path.join(config.eval_priors_dir, 'full_levdist_generated_glosses.csv')
     raw_viewable_df.to_csv(viewable_to_prior_path)
     
-    all_viewable_scores_path = os.path.join(full_folder, 'viewable_levdist_generated_glosses.csv')
+    all_viewable_scores_path = os.path.join(config.eval_priors_dir, 'viewable_levdist_generated_glosses.csv')
     viewable_df.to_csv(all_viewable_scores_path)
     
     print(f'Written all scores to: {all_updated_scores_path}')

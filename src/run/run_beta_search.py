@@ -34,7 +34,7 @@ def optimize_beta(fitting_dict):
         os.makedirs(fitting_path)
     
     success_utts_sample_path = paths.get_sample_csv_path(task_phase_to_sample_for='fit', val_eval_phase='val', split=fitting_dict['test_split'], dataset=fitting_dict['test_dataset'], data_type='success', age = None, n=config.n_beta)
-    success_utts_sample  = pd.read_csv(success_utts_sample_path).utterance_id
+    success_utts_sample = pd.read_csv(success_utts_sample_path).utterance_id
         
     # Don't use failures for beta search
     hyperparam_search_results = sample_across_models.sample_across_models(success_utts_sample, [], fitting_dict, beta_sample)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     this_model_args = vars(raw_args)
 
     this_model_args['task_phase'] = 'fit'
-    this_model_args['n_samples'] = config.n_across_time   
+    this_model_args['n_samples'] = config.n_beta
     print(this_model_args)             
     
     this_model_dict = load_models.get_fitted_model_dict(this_model_args)

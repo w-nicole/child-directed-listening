@@ -15,13 +15,26 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     
+    scored_path = os.path.join(config.eval_priors_dir, 'scored_levdist_generated_glosses.csv')
+    full_viewable_path = os.path.join(config.eval_priors_dir, 'full_levdist_generated_glosses.csv')
+    
+    viewable_grammatical_df = pd.read_csv(scored_path).sort_values(by='viewable_index')
+    full_viewable_df = pd.read_csv(full_viewable_path).sort_values(by='viewable_index')
+    
+    if not list(viewable_grammatical_df.viewable_index) == list(full_viewable_df.viewable_index):
+        import pdb; pdb.set_trace()
+       
+    merged_scored_df = full_viewable_df.copy()
+    merged_scored_df['is_grammatical'] = viewable_grammatical_df['is_grammatical']
+    
     all_tokens_phono = load_splits.load_phono()
     all_ages = list(pd.unique(all_tokens_phono.year.dropna()))
     
     plt.title("Grammaticality over time")
     
-    for prior_name, prior_folder in config.prior_folders.items():
-        with_grammar_df = time_plot.merge_viewable_and_score_df(prior_folder, all_tokens_phono)
+    for prior_name, prior_title in config.prior_folders.items():
+        prior_df = merged_scored_df[merged_scored_df['prior'] == prior_title].copy()
+        with_grammar_df = time_plot.merge_time_plot_df_prior(prior_df, all_tokens_phono)
         sorted_ages, percentages = time_plot.calculate_percentage_for_ages(with_grammar_df, all_ages)
         plt.plot(sorted_ages, percentages, label = prior_name, alpha = 0.5)
     

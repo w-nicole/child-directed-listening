@@ -32,15 +32,11 @@ def apply_if_subsample(data, path = None):
     Applies subsampling logic for either development purposes or using a smaller sample than n = 500.
     Because the utterances were originally randomly sampled, taking a prefix of a random sample should also be a random sample.
     """
-    trunc_mode = (config.dev_mode or config.subsample_mode)
     
-    assert config.n_beta == config.n_across_time, "Assumption for apply if subsample to hold."
-    
-    trunc_to_ideal = config.n_beta if not trunc_mode else config.n_subsample
+    assert config.n_beta == config.n_across_time, "Assumption for this code structure to hold."
+    trunc_to_ideal = config.n_beta
     trunc_to =  min(trunc_to_ideal, data.shape[0])
-    
-    trunc_data = data.iloc[0:trunc_to]
-            
+    trunc_data = data.iloc[0:trunc_to]            
     return trunc_data    
 
 

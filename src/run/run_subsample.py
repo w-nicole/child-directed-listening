@@ -45,7 +45,7 @@ def sample_bert_token_ids():
     for age_str, raw_df in reference_dict.items():
         stopword_df = generation_processing.filter_for_stopwords(raw_df)
         pool = list(stopword_df.bert_token_id)
-        current_n = min(len(pool), config.n_sentences_per_age)
+        current_n = min(len(pool), config.n_utterances_per_age)
         total_selected += current_n
         subsamples[age_str] = list(np.random.choice(pool, size = current_n, replace = False))
         print(f'For age: {age_str}, subsample size: {current_n} / {len(pool)}') 
@@ -76,12 +76,12 @@ def sample_bert_token_ids():
     all_tokens_phono = load_splits.load_phono()
     stopword_set = generation_processing.get_stopword_set()
     
-    
     all_phono_in_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_ids)].copy()
     stopword_in_samples_set = set(all_phono_in_subset.token)
     if not stopword_in_samples_set.issubset(stopword_set):
         import pdb; pdb.set_trace()
     assert set(all_phono_in_subset.speaker_code) == {'CHI'}
+    assert set(all_phono_in_subset.phase) == {config.eval_phase}
     
     all_shuffled_phono_in_subset_path = os.path.join(human_folder, 'viewable_levdist_generated_glosses.csv')
     tokenizer = load_models.get_primary_tokenizer()
