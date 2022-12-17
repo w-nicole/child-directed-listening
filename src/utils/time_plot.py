@@ -12,37 +12,42 @@ from utils import configuration
 config = configuration.Config()
 # end cite
 
-def merge_time_plot_df_per_prior(viewable_grammatical_df, all_tokens_phono):
+def merge_time_plot_df_per_prior(merged_df, all_tokens_phono):
 
-    all_priors_present = set(viewable_grammatical_df['prior'])
+    all_priors_present = set(merged_df['prior'])
     assert len(all_priors_present) == 1, "Need to have only one prior in the data in this function."
     prior = list(all_priors_present)[0]
     
-    if not set(viewable_grammatical_df.is_grammatical) == {0, 1, -1}:
+    if not set(merged_df.is_grammatical) == {0, 1}:
         import pdb; pdb.set_trace()
 
+    all_bert_token_ids = sorted(list(set(merged_df.bert_token_id)))
     # If any of the ALO was grammatical, mark entire thing as grammatical
-    bert_token_id_to_grammatical = defaultdict(int)
-    for entry_index in range(viewable_grammatical_df.shape[0]):
-        if viewable_grammatical_df.is_grammatical == 1:
-            bert_token_id_to_grammatical[entry_index.bert_token_id] = 1
+    bert_token_id_to_grammatical = {
+        bert_token_id : 0 for bert_token_id in all_bert_token_ids
+    }
+    for entry_index in range(merged_df.shape[0]):
+        entry = merged_df.iloc[entry_index]
+        if entry.is_grammatical == 1:
+            bert_token_id_to_grammatical[entry.bert_token_id] = 1            
     
-    all_bert_token_ids = sorted(bert_token_id.keys())
-    bert_token_id_to_grammatical_df = pd.DataFrame.from_records({
-        'bert_token_id' : all_bert_token_ids,
-        'is_grammatical' : list(map(lambda token_id : bert_token_id_to_grammatical[token_id]))
-    }).sort_values(by='bert_token_id')
+    assert sorted(bert_token_id_to_grammatical.keys()) == all_bert_token_ids
+    try:
+        bert_token_id_to_grammatical_df = pd.DataFrame.from_records({
+            'bert_token_id' : all_bert_token_ids,
+            'is_grammatical' : list(map(lambda token_id : bert_token_id_to_grammatical[token_id], all_bert_token_ids))
+        }).sort_values(by='bert_token_id')
+    except: import pdb; pdb.set_trace()
     bert_token_id_to_grammatical_df['prior'] = prior
     
-    bert_ids = set(viewable_grammatical_df.bert_token_id)
     assert len(set(all_tokens_phono.bert_token_id)) == all_tokens_phono.shape[0]
-    all_tokens_phono_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(bert_ids)].sort_values(by='bert_token_id')
+    all_tokens_phono_subset = all_tokens_phono[all_tokens_phono.bert_token_id.isin(all_bert_token_ids)].sort_values(by='bert_token_id')
     
     if not list(bert_token_id_to_grammatical_df.bert_token_id) == list(all_tokens_phono_subset.bert_token_id):
         import pdb; pdb.set_trace()
     
     bert_token_id_to_grammatical_df['year'] = list(all_tokens_phono_subset['year'])
-    return is_grammatical_df
+    return bert_token_id_to_grammatical_df
 
 
 def calculate_percentage_for_ages(merged_df, all_ages):
