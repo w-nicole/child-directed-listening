@@ -1,8 +1,24 @@
+
 from os.path import join, exists
 import os
 from src.utils import configuration
 config = configuration.Config()
 
+
+def is_prior_name_human(folder_name):
+    return config.prior_folders['Human'] == folder_name
+
+def extract_age_str(path):
+    # The age is located at the end.
+    # 7/15/21: https://www.geeksforgeeks.org/python-os-path-splitext-method/
+    filename = os.path.splitext(path)
+    age = filename[0].split('_')[-1]
+    try:
+        float(age) # Make sure you're actually extracting an age
+    except: import pdb; pdb.set_trace()
+    # end cite
+    return age
+    
 
 def validate_spec_dict(spec_dict, spec_dict_params):
 	''' make sure all necessary keys are specified for the spec_dict'''
@@ -126,25 +142,29 @@ def get_file_identifier(spec_dict):
 	else:
 		raise NotImplementedError
 	return(path)
+    
+    
+def get_chi_vocab_path():
+    folder = f'{config.finetune_dir}/all/all'
+    if not os.path.exists(folder): os.makedirs(folder)
+    path = os.path.join(folder, 'chi_vocab_train.csv')
+    return path
 
+def get_subsample_path():
+    return os.path.join(config.eval_dir, 'subsampled_bert_token_ids.pt')
 
-def get_slurm_script_name(spec_dict):
-		# formerly get_slurm_script_path
-		#<training_split>_<training_dataset>(x<tags>)(x<model_type>)(x<test_split>_<test_dataset>_<context_width>)
+def get_human_folder():
+    full_prior_folder = os.path.join(config.eval_priors_dir, 'human')
+    if not os.path.exists(full_prior_folder): os.makedirs(full_prior_folder)
+    return full_prior_folder
 
-		path = get_file_identifier(spec_dict)+'.sh'	
-		return(path)
+def get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age = None, n=None):    
 
-
-def get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age = None, n=None):    
-
-    assert ( (age is None) and (task_phase_to_sample_for == 'fit' or split == 'Providence') ) or ( (age is not None) and (task_phase_to_sample_for == 'eval') )
-    age_str = f'_{float(age)}' if age is not None else ''
+    assert ( (age is None) and (task_phase_to_sample_for == 'fit' or split == 'Providence') and val_eval_phase == 'val' ) or ( (age is not None) and (task_phase_to_sample_for == 'eval') and val_eval_phase in {'val', 'eval'} )
+    age_str = f'_{float(age) if not age == "*" else age}' if age is not None else ''
     
     assert data_type in ['success', 'yyy'], "Invalid data type requested of sample path: choose one of {success, yyy}."
     
-    # where should the sampling csvs get stored? at samples for a run,
-    # dvided by split and then by datase
     sample_folder =  get_directory({
 		"test_split" : None, 
 		"training_split" : split,
@@ -160,6 +180,6 @@ def get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age
     if not exists(sample_folder):
     	os.makedirs(sample_folder)
     
-    this_data_path = join(sample_folder, f'{task_phase_to_sample_for}_{data_type}_utts_{str(n)}{age_str}.csv')
+    this_data_path = join(sample_folder, f'{task_phase_to_sample_for}_{val_eval_phase}_{data_type}_utts_{str(n)}{age_str}.csv')
     
     return this_data_path

@@ -1,56 +1,25 @@
 {
     "SEED" : 0, 
+    "n_utterances_per_age" : 125,
     "n_beta" : 500,
-    "n_lambda" : 500,
     "n_across_time" : 500,
-    "subsamples" : [2, 100, 500, 1000],
+    "number_of_posterior_words" : 1000,
+    "number_of_substitutions_to_plot" : 5,
     "val_ratio" : ".2",
-    "unigram_model_args": [
-        {
-            "training_split": "Providence",
-            "training_dataset": "all",              
-            "model_type": "data_unigram"
-        },
-        {
-            "training_split": "no-split",
-            "training_dataset": "no-dataset",
-            "model_type":"flat_unigram"
-        }
-    ],
-    "finetune_model_args" : [        
-       ], 
-
-    "shelf_model_args": [       
-        {"training_split":"adult-written",
-         "training_dataset":"all",
-        "model_type":"BERT"} 
-    ], 
-    "child_model_args" : [     
-    ], 
+    "prior_folders" : {
+        "Human" : "human",
+        "CHILDES unigram" : "Providence_all_no_tagsxdata_unigram_Providence_all_0"
+    },
     "regenerate" : 1,
-    "dev_mode" : 0,
-    "subsample_mode" : 1,
-    "n_iter_sample" : 5000,
-    "n_dev_sample" : 2,
-    "dist_type" : "levdist",
-    "eval_phase" : "val",
+    "eval_phase" : "eval",
     "exp_determiner" : "full_scale",
     "training_version_name": "full_scale",
-    "child_context_width" : 0,
     "verbose" : 1,
     "age_split" : 30,
-    "context_list" : [20],
     "beta_low" : 2.5,
     "beta_high" : 4.5,
     "beta_num_values" : 20,
     "fail_on_beta_edge" : 1,
-    "lambda_low" : 0,
-    "lambda_high" : 2,
-    "lambda_num_values" : 20,    
-    "fail_on_lambda_edge" : 1,
-    "fst_path":"output/fst/chi-1.txt",
-    "fst_sym_path":"output/fst/chi_phones.sym",
-    "fst_cache_path":"output/unigram_fst_cache",
     "task_phases": ["sample", "extract_data", "train", "fit", "eval", "analyze"],
     "training_datasets": [["Providence", "all"]],
     "test_datasets": [["Providence", "all"]],

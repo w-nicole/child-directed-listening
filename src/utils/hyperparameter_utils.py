@@ -13,11 +13,13 @@ def get_hyperparameter_search_values(hyperparam):
     Generate the range of hyperparameter values given the parameters that are in the config file
 
     Args: 
-    hyperparam: 'lambda', 'gamma' or 'beta'
+    hyperparam: 'beta'
 
     Return:
     A range of values for the specified hyperparameter
     '''
+    
+    assert hyperparam == 'beta', "This codebase no longer supports non-beta search."
     
     low = getattr(config, hyperparam+'_low')
     high = getattr(config, hyperparam+'_high')
@@ -40,11 +42,8 @@ def get_optimal_hyperparameter_value(this_model_dict, hyperparameter):
 
     fitted_model_path = paths.get_directory(fitted_model_dict)
     
-
-    if hyperparameter == 'beta':     
-        n_hyperparameter = config.n_beta    
-    elif hyperparameter in ['lambda','gamma']:     
-        n_hyperparameter = config.n_lambda       
+    assert hyperparameter == 'beta', hyperparameter 
+    n_hyperparameter = config.n_beta    
     
     this_hyperparameter_results  =  pd.read_csv(join(fitted_model_path, hyperparameter+f'_search_results_{n_hyperparameter}.csv'))
     

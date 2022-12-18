@@ -2,7 +2,7 @@ import os
 from os.path import join, exists
 import pandas as pd
 import numpy as np
-from src.utils import data_cleaning, configuration
+from src.utils import data_cleaning, configuration, paths
 config = configuration.Config()
 
 # 7/23/21: https://www.mikulskibartosz.name/how-to-set-the-global-random_state-in-scikit-learn/
@@ -28,21 +28,14 @@ def get_age_split_data(raw_data, months = config.age_split):
 
 
 
-def save_chi_vocab(train_data, split_type, dataset_name):
+def save_all_chi_vocab(train_data):
     
     """
-    Note: These are frequencies, so it needs to be different per sub-dataset
-        (i.e. each piece of each split)
-        used to initialize the unigrams.
-        general "chi_vocab.csv" can't be used for the sub-analyses
-        
-    Note: This expects cleaned "utt_glosses" (data) with all errors removed.
-    
+    Note: This only accepts the all/all split.
+            It expects cleaned "utt_glosses" (data) with all errors removed.
     Note: If you load train_data from a saved df, it will convert list -> str which will mess up the token identification.
     'token' should be re-cast to list for correct behavior, as seen below.
     """
-    
-    this_folder = get_split_folder(split_type, dataset_name, config.finetune_dir)
     
     chi_data = train_data.loc[train_data.speaker_code == 'CHI']
     
@@ -51,7 +44,9 @@ def save_chi_vocab(train_data, split_type, dataset_name):
     token_frequencies = pd.Series(tokens).value_counts().reset_index()
     token_frequencies.columns = ['word','count']
     
-    token_frequencies.to_csv(join(this_folder, 'chi_vocab_train.csv'))
+    save_path = paths.get_chi_vocab_path()
+    token_frequencies.to_csv(save_path)
+    print(f'CHI vocabulary frequencies saved to: {save_path}')
     
     # Do not use things marked chi_vocab, they are from the past version.
    

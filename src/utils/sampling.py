@@ -5,7 +5,7 @@ import numpy as np
 from src.utils import split_gen, configuration, paths
 config = configuration.Config()
 np.random.seed(config.SEED)
-
+    
     
 def get_n(task_phase_to_sample_for):
 
@@ -28,20 +28,20 @@ def sample_pool_ids(this_pool, this_n):
     return sample
     
     
-def sample_successes_yyy(pool, task_phase_to_sample_for, split, dataset, data_type, age,  n = None):
+def sample_successes_yyy(pool, task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age,  n = None):
         
     if n is None:
         n = get_n(task_phase_to_sample_for)
     
     if age is not None: # Sample per age
-        pool = pool[pool.year == age]
+        pool = pool[np.isclose(pool.year, age)]
      
     # Need to sample the successes again and save them.
     # Use CSV for compatibility 
     
     sample = sample_pool_ids(pool, n)
     
-    this_data_path = paths.get_sample_csv_path(task_phase_to_sample_for, split, dataset, data_type, age, n)    
+    this_data_path = paths.get_sample_csv_path(task_phase_to_sample_for, val_eval_phase, split, dataset, data_type, age, n)    
 
     sample.to_csv(this_data_path) 
     
@@ -61,21 +61,21 @@ def _filter_for_scoreable_without_partition(df):
 
     return df
     
-def sample_successes(task_phase_to_sample_for, test_split, test_dataset, age, raw_phono):
+def sample_successes(task_phase_to_sample_for, val_eval_phase, test_split, test_dataset, age, raw_phono):
     
     phono = _filter_for_scoreable_without_partition(raw_phono)
     success_pool = phono[phono.partition == 'success']
     
-    sample = sample_successes_yyy(success_pool, task_phase_to_sample_for, test_split, test_dataset, 'success', age)
+    sample = sample_successes_yyy(success_pool, task_phase_to_sample_for, val_eval_phase, test_split, test_dataset, 'success', age)
     
     return sample
     
     
-def sample_yyy(task_phase_to_sample_for, test_split, test_dataset, age, raw_phono):
+def sample_yyy(task_phase_to_sample_for, val_eval_phase, test_split, test_dataset, age, raw_phono):
     
     phono = _filter_for_scoreable_without_partition(raw_phono)
     yyy_pool = phono[phono.partition == 'yyy']
     
-    sample = sample_successes_yyy(yyy_pool, task_phase_to_sample_for, test_split, test_dataset, 'yyy', age)
+    sample = sample_successes_yyy(yyy_pool, task_phase_to_sample_for, val_eval_phase, test_split, test_dataset, 'yyy', age)
     
     return sample
