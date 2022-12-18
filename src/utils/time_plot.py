@@ -53,17 +53,19 @@ def merge_time_plot_df_per_prior(merged_df, all_tokens_phono):
 def calculate_percentage_for_ages(merged_df, all_ages):
     percentages = []
     sorted_ages = sorted(all_ages)
+    plotted_ages = []
     for age in sorted_ages:
         age_df = merged_df[np.isclose(merged_df.year, age)]
         if not set(age_df.is_grammatical).issubset({0, 1}):
             import pdb; pdb.set_trace()
         if age_df.shape[0] == 0:
-            import pdb; pdb.set_trace()
-        else:
-            percentage = sum(age_df['is_grammatical']) / age_df.shape[0]
-            print(f'For age: {age}, pool: {age_df.shape[0]}')
+            print(f'Skipping age: {age}')
+            continue
+        plotted_ages.append(age)
+        percentage = sum(age_df['is_grammatical']) / age_df.shape[0]
+        print(f'For age: {age}, pool: {age_df.shape[0]}')
         percentages.append(percentage)
-    return sorted_ages, percentages
+    return plotted_ages, percentages
     
     
     

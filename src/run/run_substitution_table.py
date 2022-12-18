@@ -14,7 +14,7 @@ if __name__ == "__main__":
     all_nonhuman_updated_scores_path = os.path.join(config.eval_priors_dir, 'subsampled_levdist_generated_glosses.pkl')
     all_nonhuman_updated_scores = pd.read_pickle(all_nonhuman_updated_scores_path)
     
-    counts = substitutions.get_substitution_counter(all_nonhuman_updated_scores)
+    unique_tuples, counts = substitutions.get_substitution_counter(all_nonhuman_updated_scores)
     original_tokens = [original for original, _ in unique_tuples]
     substituted_tokens = [substitute for _, substitute in unique_tuples]
     counts_df = pd.DataFrame.from_records({

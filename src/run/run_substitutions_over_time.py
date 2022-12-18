@@ -36,15 +36,21 @@ if __name__ == '__main__':
     
     plt.title(f"Counts of top substitutions over time")
     
+    
     for substitution_pair in popular_substitutions:
         original, substitute = substitution_pair
+        plotted_ages = []
         counts_for_ages = []
         for age in all_ages:
             scores_for_age = all_nonhuman_updated_scores[np.isclose(all_nonhuman_updated_scores.age, age)]
-            counter = substitutions.get_substitution_counter(scores_for_age)
+            if scores_for_age.shape[0] == 0:
+                print(f'Skipping age: {age}')
+                continue
+            plotted_ages.append(age)
+            _, counter = substitutions.get_substitution_counter(scores_for_age)
             count = counter[substitution_pair]
             counts_for_ages.append(count)
-        plt.plot(all_ages, counts_for_ages, label = f'{original} -> {substitute}')
+        plt.plot(plotted_ages, counts_for_ages, label = f'{original} -> {substitute}')
         
     plt.xlabel('Age (in years)')
     plt.ylabel('Count')
